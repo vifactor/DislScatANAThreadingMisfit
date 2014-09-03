@@ -14,6 +14,9 @@ find_package(LAPACK REQUIRED)
 #BLAS
 find_package(BLAS REQUIRED)
 
+#BOOST
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+
 #some libraries are build as external projects
 include(ExternalProject)
 
@@ -52,4 +55,6 @@ add_executable(${EXEC_NAME} ${CPP_SOURCES})
 add_dependencies(${EXEC_NAME} config_project)
 add_dependencies(${EXEC_NAME} minterface_project)
 
-target_link_libraries(${EXEC_NAME} interface config++  gsl blas lapack)
+target_link_libraries(${EXEC_NAME} interface config++  gsl 
+                        ${Boost_LIBRARIES} ${BLAS_LIBRARIES}
+                        blas lapack)

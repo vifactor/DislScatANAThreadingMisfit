@@ -9,6 +9,7 @@
 #define PROGRAMSETTINGS_H_
 
 #include "StringTools.h"
+#include <boost/filesystem.hpp>
 #include <libconfig.h++>
 
 struct Range

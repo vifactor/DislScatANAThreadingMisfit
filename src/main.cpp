@@ -16,8 +16,6 @@
 
 using namespace std;
 
-void copy(std::string src, std::string dest);
-
 int main()
 {
 	const int * Q;
@@ -47,8 +45,15 @@ int main()
 		std::cout << ex.what() << std::endl;
 		return -1;
 	}
+    
+    //save settings file with new name
+    boost::filesystem::path backupcfgfile;
+    backupcfgfile = programSettings.getEngineSettings().outfile;
+    backupcfgfile.replace_extension(".~cfg");
+    boost::filesystem::copy_file(programSettings.getConfigfile(),
+            backupcfgfile,
+            boost::filesystem::copy_option::overwrite_if_exists);
 
-	copy(programSettings.getConfigfile(), programSettings.getEngineSettings().outfile);
 	Q = programSettings.getCalculatorSettings().Q;
 	Qperp = 2 * M_PI * sqrt(2.0 / 3 * (Q[0] * Q[0] + Q[1] * Q[1] + Q[2] * Q[2]))
 	  / programSettings.getSampleSettings().a0;
@@ -261,24 +266,5 @@ int main()
 
 	std::cout << "Done." << std::endl;
 
-	return 0;
-}
-
-void copy(std::string src, std::string dest)
-{
-	std::ofstream fout;
-	std::ifstream fin;
-	std::string filename, line;
-
-	filename = dest;
-	stripExtension(filename);
-	filename += ".~cfg";
-
-	fout.open(filename.c_str());
-	fin.open(src.c_str());
-
-	fout << fin.rdbuf();
-
-	fin.close();
-	fout.close();
+	return EXIT_SUCCESS;
 }
