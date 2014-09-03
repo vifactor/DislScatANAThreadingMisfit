@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <boost/filesystem.hpp>
 #include "ProgramSettings.h"
 #include "MCCalculatorCoplanarTriple.h"
 #include "MCCalculatorSkewDouble.h"

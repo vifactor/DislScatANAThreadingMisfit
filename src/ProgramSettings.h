@@ -8,9 +8,9 @@
 #ifndef PROGRAMSETTINGS_H_
 #define PROGRAMSETTINGS_H_
 
-#include "StringTools.h"
-#include <boost/filesystem.hpp>
+#include <boost/lexical_cast.hpp>
 #include <libconfig.h++>
+#include <vector>
 
 struct Range
 {

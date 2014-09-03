@@ -7,6 +7,8 @@
 
 #include "ProgramSettings.h"
 
+using namespace boost;
+
 Range readRange(const libconfig::Setting& stg)
 {
 	Range range;
@@ -49,22 +51,24 @@ void ProgramSettings::read(const std::string& cfgfile)
 		readEngineSettings(root);
 	} catch (const libconfig::FileIOException &fioex)
 	{
-		throw Exception(toString(fioex.what()) + " in\t" + cfgfile);
+		throw Exception(lexical_cast<std::string>(fioex.what()) + " in\t" + cfgfile);
 	} catch (const libconfig::ParseException &pex)
 	{
 		throw Exception(
-				toString(pex.what()) + " in\t" + cfgfile + ":"
-						+ toString(pex.getLine()) + " - "
-						+ toString(pex.getError()));
+				lexical_cast<std::string>(pex.what()) + " in\t" + cfgfile + ":"
+						+ lexical_cast<std::string>(pex.getLine()) + " - "
+						+ lexical_cast<std::string>(pex.getError()));
 	} catch (const libconfig::SettingNotFoundException &nfex)
 	{
 		throw Exception(
-				toString(nfex.what()) + "\t" + toString(nfex.getPath())
+				lexical_cast<std::string>(nfex.what()) + "\t" + 
+				lexical_cast<std::string>(nfex.getPath())
 						+ " in\t" + cfgfile);
 	} catch (libconfig::SettingTypeException& tex)
 	{
 		throw Exception(
-				toString(tex.what()) + "\t" + toString(tex.getPath()) + " in\t"
+				lexical_cast<std::string>(tex.what()) + "\t" + 
+				lexical_cast<std::string>(tex.getPath()) + " in\t"
 						+ cfgfile);
 	}
 }
@@ -83,12 +87,12 @@ void ProgramSettings::readCalculatorSettings(const libconfig::Setting& root)
 	}
 	else
 	{
-		throw ProgramSettings::Exception(toString(calculator["Q"].getPath()));
+		throw ProgramSettings::Exception(lexical_cast<std::string>(calculator["Q"].getPath()));
 	}
 	/*check the property of hexagonal Miller indices*/
 	if((m_calculatorSettings.Q[0] + m_calculatorSettings.Q[1] + m_calculatorSettings.Q[2]) != 0)
 	{
-		throw ProgramSettings::Exception(toString(calculator["Q"].getPath()));
+		throw ProgramSettings::Exception(lexical_cast<std::string>(calculator["Q"].getPath()));
 	}
 
 	/*X-ray wavelength*/
@@ -151,7 +155,8 @@ void ProgramSettings::readEngineSettings(const libconfig::Setting& root)
 	}
 	else
 	{
-		throw Exception("Unknown geometry setup:\t" + toString(engine["geometry"].c_str()));
+		throw Exception("Unknown geometry setup:\t" + 
+		            lexical_cast<std::string>(engine["geometry"].c_str()));
 	}
 
 	m_engineSettings.outfile = engine["outfile"].c_str();
@@ -177,11 +182,13 @@ void ProgramSettings::readSkewSettings(const libconfig::Setting& stg)
 	}
 	else
 	{
-		throw Exception("Unknown diffractometry setup:\t" + toString(stg["diffractometry"].c_str()));
+		throw Exception("Unknown diffractometry setup:\t" + 
+		            lexical_cast<std::string>(stg["diffractometry"].c_str()));
 	}
 }
 
-ProgramSettings::EngineSettings::Diffractometry ProgramSettings::defineDiffractometry(const libconfig::Setting& stg)
+ProgramSettings::EngineSettings::Diffractometry 
+ProgramSettings::defineDiffractometry(const libconfig::Setting& stg)
 {
 	std::string diffractometry;
 
