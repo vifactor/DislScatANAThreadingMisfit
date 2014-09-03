@@ -1,5 +1,1 @@
-*
-!README.md
-!default.cfg
-!src/
-!.gitignore
+/build
