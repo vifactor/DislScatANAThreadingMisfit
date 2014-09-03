@@ -46,7 +46,7 @@ link_directories(${CMAKE_BINARY_DIR}/src/minterface_project-build)
 link_directories(${CMAKE_BINARY_DIR}/src/config_project-build/lib)
 
 file(GLOB CPP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-set(EXEC_NAME DislScatCubFITMisfitThreading)
+set(EXEC_NAME DislScatANAThreadingMisfit)
 add_executable(${EXEC_NAME} ${CPP_SOURCES})
 
 add_dependencies(${EXEC_NAME} config_project)

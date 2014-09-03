@@ -54,21 +54,11 @@ void MCSampleHex::addThreadingLayer(double rho, double b_edge, double b_screw, d
 	m_layers.push_back(new ThreadingLayerHex(rho, b_edge, b_screw, rc, Qx, Qz, nu));
 }
 
-void MCSampleHex::addMisfitInterface(double rho, double bx, double bz, double nu, double d)
+void MCSampleHex::addMisfitInterface(double rho, double bx, double by, double bz,
+                                                 double Qx, double Qy, double Qz,
+                                                 double nu, double d)
 {
-	m_interfaces.push_back(new MisfitInterfaceHex(rho, bx, bz, nu, d));
-}
-
-void MCSampleHex::setQ(double Qx, double Qy, double Qz)
-{
-	//double Qperp;
-	for(size_t i = 0; i < m_interfaces.size(); ++i)
-	{
-		m_interfaces[i]->setQ(Qx, Qy, Qz);
-	}
-	//Qperp = sqrt(Qx * Qx + Qz * Qz);
-	for(size_t i = 0; i < m_layers.size(); ++i)
-	{
-		//m_layers[i]->setQ(Qperp, Qz);
-	}
+	m_interfaces.push_back(new AnalyticalMisfitInterfaceHex(rho, bx, by, bz, 
+	                                                            Qx, Qy, Qz,
+	                                                            nu, d));
 }

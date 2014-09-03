@@ -61,17 +61,6 @@ int main()
 	sample = new MCSampleHex(programSettings.getSampleSettings().thickness,
 			programSettings.getSampleSettings().width);
 
-	/*one misfit interfaces*/
-	for (size_t i = 0; i < programSettings.getSampleSettings().misfit.size();
-			++i)
-	{
-		sample->addMisfitInterface(
-				programSettings.getSampleSettings().misfit[i].rho * 1e-7,
-				programSettings.getSampleSettings().misfit[i].b_x,
-				programSettings.getSampleSettings().misfit[i].b_z,
-				programSettings.getSampleSettings().nu,
-				programSettings.getSampleSettings().thickness);
-	}
 	/*add threading layers*/
 	for (size_t i = 0; i < programSettings.getSampleSettings().threading.size();
 			++i)
@@ -92,9 +81,20 @@ int main()
 		Qx = Qperp;
 		Qy = 0.0;
 		Qz = Qpar;
-
+	    /*one misfit interfaces*/
+	    for (size_t i = 0; i < programSettings.getSampleSettings().misfit.size();
+			    ++i)
+	    {
+		    sample->addMisfitInterface(
+				    programSettings.getSampleSettings().misfit[i].rho * 1e-7,
+				    programSettings.getSampleSettings().misfit[i].b_x,
+				    0.0,//by
+				    programSettings.getSampleSettings().misfit[i].b_z,
+				    Qx, Qy, Qz,
+				    programSettings.getSampleSettings().nu,
+				    programSettings.getSampleSettings().thickness);
+	    }
 		std::cout << "Q_lab:\t" << Qx << "\t" << Qy << "\t" << Qz << std::endl;
-		sample->setQ(Qx, Qy, Qz);
 		calculator_coplanar_triple = new MCCalculatorCoplanarTriple(sample, rng,
 				programSettings.getCalculatorSettings().nbMCCalls);
 		calculator_coplanar_triple->setResolution(programSettings.getCalculatorSettings().qresolX,
@@ -135,10 +135,21 @@ int main()
 			Qx = Qperp * cosAlpha;
 			Qy = Qperp * sinAlpha;
 			Qz = Qpar;
-			sample->setQ(Qx, Qy, Qz);
 
 			std::cout << "Q_lab:\t" << Qx << "\t" << Qy << "\t" << Qz << std::endl;
-
+            
+     	    for (size_t i = 0; i < programSettings.getSampleSettings().misfit.size();
+			    ++i)
+	        {
+		        sample->addMisfitInterface(
+				        programSettings.getSampleSettings().misfit[i].rho * 1e-7,
+				        programSettings.getSampleSettings().misfit[i].b_x,
+				        0.0,//by
+				        programSettings.getSampleSettings().misfit[i].b_z,
+				        Qx, Qy, Qz,
+				        programSettings.getSampleSettings().nu,
+				        programSettings.getSampleSettings().thickness);
+	        }
 			programSettings.getEngineSettings().qxRange.toVector(qx);
 
 			fout.open(programSettings.getEngineSettings().outfile.c_str());
@@ -189,7 +200,20 @@ int main()
 			Qx = Qperp;
 			Qy = 0.0;
 			Qz = Qpar;
-			sample->setQ(Qx, Qy, Qz);
+                        
+            for (size_t i = 0; i < programSettings.getSampleSettings().misfit.size();
+			    ++i)
+	        {
+		        sample->addMisfitInterface(
+				        programSettings.getSampleSettings().misfit[i].rho * 1e-7,
+				        programSettings.getSampleSettings().misfit[i].b_x,
+				        0.0,//by
+				        programSettings.getSampleSettings().misfit[i].b_z,
+				        Qx, Qy, Qz,
+				        programSettings.getSampleSettings().nu,
+				        programSettings.getSampleSettings().thickness);
+	        }
+
 			calculator_skew_triple = new MCCalculatorSkewTriple(sample,
 					asin(sinPsi), rng,
 					programSettings.getCalculatorSettings().nbMCCalls);
