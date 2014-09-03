@@ -29,15 +29,27 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
 )
 
+#misfit interfaces library
+ExternalProject_Add(
+    minterface_project
+    PREFIX ${CMAKE_BINARY_DIR}
+    GIT_REPOSITORY https://github.com/vifactor/AnalyticalMisfitInterface.git
+    GIT_TAG origin
+)
+
 #compile project itself
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR}/src/minterface_project-build)
 include_directories(${CMAKE_BINARY_DIR}/src/config_project-build/include)
 
+link_directories(${CMAKE_BINARY_DIR}/src/minterface_project-build)
 link_directories(${CMAKE_BINARY_DIR}/src/config_project-build/lib)
 
 file(GLOB CPP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-add_executable(DislScatANAThreadingMisfit ${CPP_SOURCES})
+set(EXEC_NAME DislScatCubFITMisfitThreading)
+add_executable(${EXEC_NAME} ${CPP_SOURCES})
 
-add_dependencies(DislScatANAThreadingMisfit config_project)
+add_dependencies(${EXEC_NAME} config_project)
+add_dependencies(${EXEC_NAME} minterface_project)
 
-target_link_libraries(DislScatANAThreadingMisfit config++  gsl blas lapack)
+target_link_libraries(${EXEC_NAME} interface config++  gsl blas lapack)
